@@ -12,6 +12,7 @@ import (
 var addr string = "localhost:50051"
 
 func main() {
+	//* Create connection to server
 	conn, err := grpc.Dial(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("Failed to connect: %v\n", err)

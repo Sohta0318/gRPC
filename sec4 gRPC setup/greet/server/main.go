@@ -25,6 +25,7 @@ func main() {
 
 	log.Printf("Listening on: %s\n", addr)
 
+	//* Create grpc server
 	s := grpc.NewServer()
 	pb.RegisterGreetServiceServer(s, &Server{})
 
