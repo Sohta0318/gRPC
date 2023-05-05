@@ -35,7 +35,7 @@ func NewCalculatorClient(cc grpc.ClientConnInterface) CalculatorClient {
 
 func (c *calculatorClient) Sum(ctx context.Context, in *SumRequest, opts ...grpc.CallOption) (*SumResponse, error) {
 	out := new(SumResponse)
-	err := c.cc.Invoke(ctx, "/Calculator/Sum", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/calculator.Calculator/Sum", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -80,7 +80,7 @@ func _Calculator_Sum_Handler(srv interface{}, ctx context.Context, dec func(inte
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/Calculator/Sum",
+		FullMethod: "/calculator.Calculator/Sum",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(CalculatorServer).Sum(ctx, req.(*SumRequest))
@@ -92,7 +92,7 @@ func _Calculator_Sum_Handler(srv interface{}, ctx context.Context, dec func(inte
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Calculator_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "Calculator",
+	ServiceName: "calculator.Calculator",
 	HandlerType: (*CalculatorServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
