@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+option go_package="github.com/Sohta0318/gRPC/calculator/proto";
+
+message CalculatorResponse {
+  int32 prime_number = 1;
+}
+
+message CalculatorRequest {
+  int32 one = 1;
+}
+
+service Calculator {
+rpc Decompose(CalculatorRequest) returns (stream CalculatorResponse);
+}
