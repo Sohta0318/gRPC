@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+option go_package="github.com/Sohta0318/gRPC/calculator/proto";
+
+message CalculatorRequest {
+  int32 num = 1;
+};
+
+message CalculatorResponse {
+  int32 average = 1;
+};
+
+service Calculator {
+  rpc Calculate( stream CalculatorRequest) returns (CalculatorResponse);
+};
