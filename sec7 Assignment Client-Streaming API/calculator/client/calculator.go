@@ -10,13 +10,7 @@ import (
 func doCalculate(c pb.CalculatorClient) {
 	log.Println("doCalculate was invoked")
 
-	reqs := []*pb.CalculatorRequest{
-		{Num: 1},
-		{Num: 2},
-		{Num: 3},
-		{Num: 4},
-		{Num: 5},
-	}
+	reqs := []int32{1, 2, 3, 4, 5}
 
 	stream, err := c.Calculate(context.Background())
 
@@ -26,7 +20,9 @@ func doCalculate(c pb.CalculatorClient) {
 
 	for _, req := range reqs {
 
-		stream.Send(req)
+		stream.Send(&pb.CalculatorRequest{
+			Num: req,
+		})
 	}
 
 	res, err := stream.CloseAndRecv()

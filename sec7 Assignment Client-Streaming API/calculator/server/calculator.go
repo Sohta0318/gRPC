@@ -12,12 +12,14 @@ func (s *Server) Calculate(stream pb.Calculator_CalculateServer) error {
 
 	res := 0
 
+	count := 0
+
 	for {
 		req, err := stream.Recv()
 
 		if err == io.EOF {
 			return stream.SendAndClose(&pb.CalculatorResponse{
-				Average: int32(res),
+				Average: int32(res) / int32(count),
 			})
 		}
 
@@ -25,9 +27,8 @@ func (s *Server) Calculate(stream pb.Calculator_CalculateServer) error {
 			log.Fatalf("Something wrong %v\n", err)
 		}
 
-		res += int(req.Num) / 5
-
-		log.Printf("Average is %d\n", res/5)
+		res += int(req.Num)
+		count++
 
 	}
 
