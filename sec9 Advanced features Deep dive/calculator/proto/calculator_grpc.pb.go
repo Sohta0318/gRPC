@@ -23,6 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CalculatorClient interface {
 	Sqrt(ctx context.Context, in *SqrtRequest, opts ...grpc.CallOption) (*SqrtResponse, error)
+	GreetWithDeadLine(ctx context.Context, in *GreetRequest, opts ...grpc.CallOption) (*GreetResponse, error)
 }
 
 type calculatorClient struct {
@@ -42,11 +43,21 @@ func (c *calculatorClient) Sqrt(ctx context.Context, in *SqrtRequest, opts ...gr
 	return out, nil
 }
 
+func (c *calculatorClient) GreetWithDeadLine(ctx context.Context, in *GreetRequest, opts ...grpc.CallOption) (*GreetResponse, error) {
+	out := new(GreetResponse)
+	err := c.cc.Invoke(ctx, "/calculator.Calculator/GreetWithDeadLine", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CalculatorServer is the server API for Calculator service.
 // All implementations must embed UnimplementedCalculatorServer
 // for forward compatibility
 type CalculatorServer interface {
 	Sqrt(context.Context, *SqrtRequest) (*SqrtResponse, error)
+	GreetWithDeadLine(context.Context, *GreetRequest) (*GreetResponse, error)
 	mustEmbedUnimplementedCalculatorServer()
 }
 
@@ -56,6 +67,9 @@ type UnimplementedCalculatorServer struct {
 
 func (UnimplementedCalculatorServer) Sqrt(context.Context, *SqrtRequest) (*SqrtResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Sqrt not implemented")
+}
+func (UnimplementedCalculatorServer) GreetWithDeadLine(context.Context, *GreetRequest) (*GreetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GreetWithDeadLine not implemented")
 }
 func (UnimplementedCalculatorServer) mustEmbedUnimplementedCalculatorServer() {}
 
@@ -88,6 +102,24 @@ func _Calculator_Sqrt_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Calculator_GreetWithDeadLine_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GreetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CalculatorServer).GreetWithDeadLine(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/calculator.Calculator/GreetWithDeadLine",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CalculatorServer).GreetWithDeadLine(ctx, req.(*GreetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Calculator_ServiceDesc is the grpc.ServiceDesc for Calculator service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -98,6 +130,10 @@ var Calculator_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Sqrt",
 			Handler:    _Calculator_Sqrt_Handler,
+		},
+		{
+			MethodName: "GreetWithDeadLine",
+			Handler:    _Calculator_GreetWithDeadLine_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

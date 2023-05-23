@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"time"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -22,5 +23,7 @@ func main() {
 
 	c := pb.NewCalculatorClient(conn)
 
-	doSqrt(c, -10)
+	// doSqrt(c, -10)
+	// doGreetWithDeadline(c, time.Second * 5)
+	doGreetWithDeadline(c, time.Second * 1)
 }

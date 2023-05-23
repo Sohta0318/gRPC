@@ -5,6 +5,7 @@ package calculator;
 option go_package="github.com/Sohta0318/gRPC/calculator/proto";
 
 import "sqrt.proto";
+import "greet.proto";
 
 message CalculatorRequest {
   int32 num = 1;
@@ -16,4 +17,5 @@ message CalculatorResponse {
 
 service Calculator {
   rpc Sqrt (SqrtRequest) returns (SqrtResponse);
+  rpc GreetWithDeadLine (GreetRequest) returns (GreetResponse);
 };
